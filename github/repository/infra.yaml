@@ -1,5 +1,6 @@
-name: Github Org
-type: radiatus/gh-org
+name: Github Repo
+type: radiatus/gh-repo
+private: true
 
 parameters:
   type: object
@@ -10,12 +11,19 @@ parameters:
 
 inputs:
   type: object
-  properties: {}
+  properties:
+    organization:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
 
 outputs:
   type: object
   properties:
-    organization:
+    repo:
       type: object
       properties:
         id:

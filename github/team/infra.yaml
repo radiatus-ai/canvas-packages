@@ -1,5 +1,6 @@
 name: Github Team
 type: radiatus/gh-team
+private: true
 
 parameters:
   type: object
