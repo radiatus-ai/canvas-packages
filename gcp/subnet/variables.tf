@@ -14,3 +14,7 @@ variable "region" {
 variable "cidr" {
   type = string
 }
+
+variable "gcp_authentication" {
+  type = any
+}
