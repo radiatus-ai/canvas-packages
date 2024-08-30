@@ -1,0 +1,99 @@
+name: GCP Storage Bucket
+type: gcp/storage-bucket
+
+parameters:
+  type: object
+  properties:
+    name:
+      type: string
+      title: Bucket Name
+      description: "The name of the storage bucket"
+      pattern: "^[a-z0-9][-_.a-z0-9]*[a-z0-9]$"
+      maxLength: 63
+    location:
+      type: string
+      title: Location
+      description: "The location of the bucket (region or multi-region)"
+      enum:
+        [
+          "US",
+          "EU",
+          "ASIA",
+          "us-central1",
+          "us-east1",
+          "us-west1",
+          "us-east4",
+          "europe-west1",
+          "europe-west2",
+          "asia-east1",
+          "asia-northeast1",
+        ]
+    storage_class:
+      type: string
+      title: Storage Class
+      description: "The storage class of the bucket"
+      enum: ["STANDARD", "NEARLINE", "COLDLINE", "ARCHIVE"]
+      default: "STANDARD"
+    versioning:
+      type: boolean
+      title: Enable Versioning
+      description: "Whether to enable versioning for the bucket"
+      default: false
+    lifecycle_rules:
+      type: array
+      title: Lifecycle Rules
+      description: "List of lifecycle rules for the bucket"
+      items:
+        type: object
+        properties:
+          action:
+            type: string
+            enum: ["Delete", "SetStorageClass"]
+          age:
+            type: integer
+            minimum: 0
+          storage_class:
+            type: string
+            enum: ["NEARLINE", "COLDLINE", "ARCHIVE"]
+    encryption:
+      type: object
+      title: Encryption
+      description: "Encryption settings for the bucket"
+      properties:
+        default_kms_key_name:
+          type: string
+          description: "The Cloud KMS key name to use for the default encryption"
+    uniform_bucket_level_access:
+      type: boolean
+      title: Uniform Bucket-Level Access
+      description: "Whether to enable uniform bucket-level access"
+      default: true
+    public_access_prevention:
+      type: string
+      title: Public Access Prevention
+      description: "The public access prevention setting"
+      enum: ["inherited", "enforced"]
+      default: "inherited"
+  required:
+    - name
+    - location
+
+inputs:
+  type: object
+  properties: {}
+
+outputs:
+  type: object
+  properties:
+    bucket:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "The unique identifier for the created storage bucket"
+        url:
+          type: string
+          description: "The base URL of the bucket"
+        self_link:
+          type: string
+          description: "The URI of the created bucket"

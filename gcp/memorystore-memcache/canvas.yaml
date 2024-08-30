@@ -1,0 +1,69 @@
+name: GCP Memorystore for Memcached
+type: gcp/memorystore-memcached
+
+parameters:
+  type: object
+  properties:
+    name:
+      type: string
+      title: Instance Name
+      description: "The name of the Memcached instance"
+      pattern: "^[a-z][-a-z0-9]*[a-z0-9]$"
+      maxLength: 63
+    region:
+      type: string
+      title: Region
+      description: "The GCP region where the instance will be created"
+      pattern: "^[a-z]+-[a-z]+[0-9]$"
+    node_count:
+      type: integer
+      title: Node Count
+      description: "The number of nodes in the Memcached instance"
+      minimum: 1
+      maximum: 20
+      default: 1
+    node_cpu:
+      type: integer
+      title: Node CPU Count
+      description: "The number of CPUs per node"
+      enum: [1, 2, 4, 8]
+      default: 1
+    node_memory_mb:
+      type: integer
+      title: Node Memory (MB)
+      description: "The amount of memory per node in MB"
+      enum: [1024, 2048, 4096, 8192, 16384, 32768]
+      default: 1024
+    memcache_version:
+      type: string
+      title: Memcached Version
+      description: "The version of Memcached software"
+      enum: ["MEMCACHE_1_5"]
+      default: "MEMCACHE_1_5"
+  required:
+    - name
+    - region
+    - node_count
+
+inputs:
+  type: object
+  properties:
+    network:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "The ID of the VPC network to connect to"
+
+outputs:
+  type: object
+  properties:
+    instance:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "The unique identifier for the created Memcached instance"
+        discovery_endpoint:
+          type: string
+          description: "The discovery endpoint for the Memcached instance"

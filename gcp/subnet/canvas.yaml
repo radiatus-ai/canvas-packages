@@ -1,0 +1,48 @@
+name: GCP Subnetwork
+type: gcp/subnet
+
+parameters:
+  type: object
+  properties:
+    name:
+      type: string
+      title: Name
+      description: "The name of the subnetwork"
+      pattern: "^[a-z]([-a-z0-9]*[a-z0-9])?$"
+      maxLength: 63
+    region:
+      type: string
+      title: Region
+      description: "The GCP region where the subnetwork will be created"
+      format: "regex"
+      pattern: "^[a-z]+-[a-z]+[0-9]$"
+    cidr:
+      type: string
+      title: CIDR Block
+      description: "The IP range of the subnetwork in CIDR notation"
+      pattern: "^([0-9]{1,3}\\.){3}[0-9]{1,3}(\\/([0-9]|[1-2][0-9]|3[0-2]))?$"
+  required:
+    - name
+    - region
+    - cidr
+  additionalProperties: false
+
+inputs:
+  type: object
+  properties:
+    network:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "The ID of the parent VPC network"
+
+outputs:
+  type: object
+  properties:
+    subnet:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "The unique identifier for the created subnetwork"

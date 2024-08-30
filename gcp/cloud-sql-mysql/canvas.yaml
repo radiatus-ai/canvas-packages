@@ -1,0 +1,97 @@
+name: GCP Cloud SQL MySQL
+type: gcp/cloudsql-mysql
+
+parameters:
+  type: object
+  properties:
+    name:
+      type: string
+      title: Instance Name
+      description: "The name of the Cloud SQL instance"
+      pattern: "^[a-z][a-z0-9-]+[a-z0-9]$"
+      maxLength: 63
+    database_version:
+      type: string
+      title: MySQL Version
+      description: "The MySQL version to use"
+      enum: ["MYSQL_5_6", "MYSQL_5_7", "MYSQL_8_0"]
+      default: "MYSQL_8_0"
+    region:
+      type: string
+      title: Region
+      description: "The GCP region where the instance will be created"
+      pattern: "^[a-z]+-[a-z]+[0-9]$"
+    tier:
+      type: string
+      title: Machine Type
+      description: "The machine type to use, in the form db-custom-CPUS-MEMORY"
+      pattern: "^db-custom-[1-9][0-9]?-[0-9]+$"
+      default: "db-custom-1-3840"
+    storage_type:
+      type: string
+      title: Storage Type
+      description: "The storage type for the instance"
+      enum: ["PD_SSD", "PD_HDD"]
+      default: "PD_SSD"
+    storage_size_gb:
+      type: integer
+      title: Storage Size (GB)
+      description: "The size of the storage in GB"
+      minimum: 10
+      maximum: 65536
+    availability_type:
+      type: string
+      title: Availability Type
+      description: "The availability type of the instance"
+      enum: ["ZONAL", "REGIONAL"]
+      default: "ZONAL"
+    backup_enabled:
+      type: boolean
+      title: Enable Backups
+      description: "Whether to enable automated backups"
+      default: true
+    backup_start_time:
+      type: string
+      title: Backup Start Time
+      description: "The start time of the backup window in UTC (HH:MM)"
+      pattern: "^([01]?[0-9]|2[0-3]):[0-5][0-9]$"
+      default: "02:00"
+    enable_binary_log:
+      type: boolean
+      title: Enable Binary Logging
+      description: "Whether to enable binary logging for replication"
+      default: true
+  required:
+    - name
+    - region
+    - tier
+    - storage_size_gb
+
+inputs:
+  type: object
+  properties:
+    network:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "The ID of the VPC network to connect to"
+
+outputs:
+  type: object
+  properties:
+    instance:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "The unique identifier for the created Cloud SQL instance"
+        connection_name:
+          type: string
+          description: "The connection name of the instance"
+        public_ip_address:
+          type: string
+          description: "The public IP address of the instance"
+        private_ip_address:
+          type: string
+          description: "The private IP address of the instance"

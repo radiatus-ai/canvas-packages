@@ -1,0 +1,53 @@
+name: GCP Memorystore (Redis)
+type: gcp/memorystore-redis
+
+parameters:
+  type: object
+  properties:
+    name:
+      type: string
+      title: Instance Name
+    tier:
+      type: string
+      title: Tier
+      enum: ["BASIC", "STANDARD_HA"]
+      default: "BASIC"
+    memory_size_gb:
+      type: integer
+      title: Memory Size (GB)
+      minimum: 1
+      maximum: 300
+    region:
+      type: string
+      title: Region
+    redis_version:
+      type: string
+      title: Redis Version
+      enum: ["REDIS_3_2", "REDIS_4_0", "REDIS_5_0", "REDIS_6_X"]
+      default: "REDIS_6_X"
+  required:
+    - name
+    - memory_size_gb
+    - region
+
+inputs:
+  type: object
+  properties:
+    network:
+      type: object
+      properties:
+        id:
+          type: string
+
+outputs:
+  type: object
+  properties:
+    instance:
+      type: object
+      properties:
+        id:
+          type: string
+        host:
+          type: string
+        port:
+          type: integer

@@ -1,0 +1,94 @@
+name: GCP Cloud SQL PostgreSQL
+type: gcp/cloudsql-postgres
+
+parameters:
+  type: object
+  properties:
+    name:
+      type: string
+      title: Instance Name
+      description: "The name of the Cloud SQL instance"
+      pattern: "^[a-z][a-z0-9-]+[a-z0-9]$"
+      maxLength: 63
+    database_version:
+      type: string
+      title: PostgreSQL Version
+      description: "The PostgreSQL version to use"
+      enum:
+        [
+          "POSTGRES_9_6",
+          "POSTGRES_10",
+          "POSTGRES_11",
+          "POSTGRES_12",
+          "POSTGRES_13",
+          "POSTGRES_14",
+        ]
+      default: "POSTGRES_14"
+    region:
+      type: string
+      title: Region
+      description: "The GCP region where the instance will be created"
+      pattern: "^[a-z]+-[a-z]+[0-9]$"
+    tier:
+      type: string
+      title: Machine Type
+      description: "The machine type to use, in the form db-custom-CPUS-MEMORY"
+      pattern: "^db-custom-[1-9][0-9]?-[0-9]+$"
+      default: "db-custom-1-3840"
+    storage_type:
+      type: string
+      title: Storage Type
+      description: "The storage type for the instance"
+      enum: ["PD_SSD", "PD_HDD"]
+      default: "PD_SSD"
+    storage_size_gb:
+      type: integer
+      title: Storage Size (GB)
+      description: "The size of the storage in GB"
+      minimum: 10
+      maximum: 65536
+    availability_type:
+      type: string
+      title: Availability Type
+      description: "The availability type of the instance"
+      enum: ["ZONAL", "REGIONAL"]
+      default: "ZONAL"
+    backup_enabled:
+      type: boolean
+      title: Enable Backups
+      description: "Whether to enable automated backups"
+      default: true
+  required:
+    - name
+    - region
+    - tier
+    - storage_size_gb
+
+inputs:
+  type: object
+  properties:
+    network:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "The ID of the VPC network to connect to"
+
+outputs:
+  type: object
+  properties:
+    instance:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "The unique identifier for the created Cloud SQL instance"
+        connection_name:
+          type: string
+          description: "The connection name of the instance"
+        public_ip_address:
+          type: string
+          description: "The public IP address of the instance"
+        private_ip_address:
+          type: string
+          description: "The private IP address of the instance"

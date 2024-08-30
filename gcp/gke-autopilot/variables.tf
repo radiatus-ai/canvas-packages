@@ -1,3 +1,4 @@
+# todo: generate w/ cli
 variable "name" {
   type = string
 }
