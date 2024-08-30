@@ -1,5 +1,20 @@
 repos:
   - repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.74.0 # Use the latest version available
+    rev: v1.83.5 # Use the latest version (as of my last update)
     hooks:
       - id: terraform_fmt
+      # - id: terraform_validate
+      # - id: terraform_docs
+      # - id: terraform_tflint
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0 # Use the latest version (as of my last update)
+    hooks:
+      # - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  # - repo: https://github.com/adrienverge/yamllint
+  #   rev: v1.32.0 # Use the latest version (as of my last update)
+  #   hooks:
+  #     - id: yamllint

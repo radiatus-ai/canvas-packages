@@ -1,0 +1,40 @@
+name: GKE Autopilot
+type: gcp/gke-autopilot
+
+parameters:
+  type: object
+  properties:
+    name:
+      type: string
+      title: Cluster Name
+    # comes from the subnet
+    # region:
+    #   type: string
+    #   title: Region
+    nodeCount:
+      type: integer
+      title: Number of Nodes
+      default: 3
+  required:
+    - name
+    # - region
+
+inputs:
+  type: object
+  properties:
+    subnet:
+      type: object
+      properties:
+        id:
+          type: string
+
+outputs:
+  type: object
+  properties:
+    cluster:
+      type: object
+      properties:
+        id:
+          type: string
+        endpoint:
+          type: string

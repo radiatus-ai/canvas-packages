@@ -4,13 +4,16 @@ type: gcp/pubsub
 parameters:
   type: object
   properties:
-    name:
+    topic_name:
       type: string
-      title: Name
-      minLength: 4
-      maxLength: 20
+      title: Topic Name
+    message_retention_duration:
+      type: string
+      title: Message Retention Duration
+      default: "86600s"
   required:
-    - name
+    - topic_name
+    - message_retention_duration
 
 inputs:
   type: object
@@ -24,3 +27,7 @@ outputs:
       properties:
         id:
           type: string
+        name:
+          type: string
+    topic_arn:
+      type: string
