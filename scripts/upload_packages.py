@@ -72,9 +72,9 @@ def upload_packages(api_base_url: str, modules_dir: str, gcs_bucket_name: str) -
                     # Upload package directory to GCS
                     package_dir = os.path.dirname(file_path)
                     gcs_destination = f"packages/{created_package['name']}"
-                    # todo: double-check this location before you start consuming from it
-                    upload_to_gcs(gcs_bucket_name, package_dir, gcs_destination)
-                    print(f"Uploaded package contents to GCS: {gcs_destination}")
+                    # # todo: double-check this location before you start consuming from it
+                    # upload_to_gcs(gcs_bucket_name, package_dir, gcs_destination)
+                    # print(f"Uploaded package contents to GCS: {gcs_destination}")
 
                 except requests.RequestException as e:
                     print(f"Failed to create package: {package_data['name']}")
@@ -87,7 +87,8 @@ def upload_packages(api_base_url: str, modules_dir: str, gcs_bucket_name: str) -
 if __name__ == "__main__":
     API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8000")
     GCS_BUCKET_NAME = os.getenv("GCS_BUCKET_NAME", "rad-dev-canvas-kwm6")
-    MODULE_DIRS = os.getenv("MODULE_DIRS", "gcp/vpc,gcp/subnet,gcp/pubsub,gcp/gke-autopilot").split(",")
+    MODULE_DIRS = os.getenv("MODULE_DIRS", "['gcp/cloud-sql-mysql', 'gcp/cloud-sql-postgresql', 'gcp/gke-autopilot', 'gcp/memorystore-memcache', 'gcp/memorystore-redis', 'gcp/pubsub', 'gcp/storage-bucket', 'gcp/subnet', 'gcp/vpc']")
+    MODULE_DIRS = eval(MODULE_DIRS) if isinstance(MODULE_DIRS, str) else MODULE_DIRS
 
     total_uploaded_packages = 0
     for module_dir in MODULE_DIRS:
