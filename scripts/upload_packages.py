@@ -1,4 +1,6 @@
 import os
+import time
+import shutil
 from typing import Any, Dict, List
 
 import requests
@@ -36,6 +38,16 @@ def create_package(api_base_url: str, package_data: Dict[str, Any]) -> Dict[str,
     return response.json()
 
 
+def remove_gcs_directory(bucket_name: str, directory_path: str):
+    """Removes all blobs in the specified GCS directory."""
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    blobs = bucket.list_blobs(prefix=directory_path)
+    for blob in blobs:
+        blob.delete()
+    print(f"Removed existing directory: {directory_path}")
+
+
 def upload_to_gcs(bucket_name: str, source_dir: str, destination_blob_name: str):
     """Uploads a directory to the specified GCS bucket."""
     storage_client = storage.Client()
@@ -71,14 +83,23 @@ def upload_packages(api_base_url: str, modules_dir: str, gcs_bucket_name: str) -
 
                     # Upload package directory to GCS
                     package_dir = os.path.dirname(file_path)
-                    gcs_destination = f"packages/{created_package['name']}"
-                    # # todo: double-check this location before you start consuming from it
-                    # upload_to_gcs(gcs_bucket_name, package_dir, gcs_destination)
-                    # print(f"Uploaded package contents to GCS: {gcs_destination}")
+                    gcs_destination = f"{created_package['type']}"
+
+                    # Remove existing directory before uploading
+                    remove_gcs_directory(gcs_bucket_name, gcs_destination)
+
+                    upload_to_gcs(gcs_bucket_name, package_dir, gcs_destination)
+                    print(f"Uploaded package contents to GCS: {gcs_destination}")
+
+                    # Add a 2-second delay after each package upload
+                    time.sleep(2)
 
                 except requests.RequestException as e:
                     print(f"Failed to create package: {package_data['name']}")
                     print(f"Error: {str(e)}")
+
+                # Return after processing one package
+                return uploaded_packages
 
     return uploaded_packages
 
@@ -86,7 +107,7 @@ def upload_packages(api_base_url: str, modules_dir: str, gcs_bucket_name: str) -
 # Example usage
 if __name__ == "__main__":
     API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8000")
-    GCS_BUCKET_NAME = os.getenv("GCS_BUCKET_NAME", "rad-dev-canvas-kwm6")
+    GCS_BUCKET_NAME = os.getenv("GCS_BUCKET_NAME", "rad-packages-1234")
     MODULE_DIRS = os.getenv("MODULE_DIRS", "['gcp/cloud-sql-mysql', 'gcp/cloud-sql-postgresql', 'gcp/gke-autopilot', 'gcp/memorystore-memcache', 'gcp/memorystore-redis', 'gcp/pubsub', 'gcp/storage-bucket', 'gcp/subnet', 'gcp/vpc']")
     MODULE_DIRS = eval(MODULE_DIRS) if isinstance(MODULE_DIRS, str) else MODULE_DIRS
 
