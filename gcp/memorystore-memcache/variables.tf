@@ -47,3 +47,8 @@ variable "memcache_parameters" {
   description = "Additional Memcached parameters"
   default     = {}
 }
+
+variable "network" {
+  type    = any
+  default = {}
+}

@@ -34,3 +34,8 @@ variable "labels" {
   description = "A set of key/value label pairs to assign to the instance"
   default     = {}
 }
+
+variable "network" {
+  type    = any
+  default = {}
+}

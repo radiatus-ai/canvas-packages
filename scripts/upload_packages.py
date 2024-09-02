@@ -29,7 +29,7 @@ def convert_yaml_to_package(yaml_data: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def create_package(api_base_url: str, package_data: Dict[str, Any]) -> Dict[str, Any]:
-    url = f"{api_base_url}/packages/"
+    url = f"{api_base_url}/packages/create-or-update"
     headers = {
         "Authorization": f"Bearer {os.getenv('API_OAUTH_TOKEN')}"
     }
