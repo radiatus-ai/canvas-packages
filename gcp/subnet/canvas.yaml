@@ -36,6 +36,8 @@ inputs:
         id:
           type: string
           description: "The ID of the parent VPC network"
+  required:
+    - network
 
 outputs:
   type: object

@@ -1,34 +1,28 @@
-name: GKE Autopilot
-type: gcp/gke-autopilot
+name: Rad App
+type: rad/app
 
 parameters:
   type: object
   properties:
     name:
       type: string
-      title: Cluster Name
-    # comes from the subnet
-    # region:
-    #   type: string
-    #   title: Region
-    nodeCount:
-      type: integer
-      title: Number of Nodes
-      default: 3
+      title: App Name
   required:
     - name
-    # - region
 
 inputs:
   type: object
   properties:
-    subnet:
+    cluster:
       type: object
       properties:
         id:
           type: string
-  required:
-    - subnet
+    instance:
+      type: object
+      properties:
+        id:
+          type: string
 
 outputs:
   type: object

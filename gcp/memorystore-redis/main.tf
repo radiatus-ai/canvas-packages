@@ -1,5 +1,5 @@
 resource "google_compute_global_address" "service_range" {
-  name          = "address"
+  name          = "${var.name}-service-range"
   purpose       = "VPC_PEERING"
   address_type  = "INTERNAL"
   prefix_length = 16
@@ -15,7 +15,7 @@ resource "google_service_networking_connection" "private_service_connection" {
 
 resource "google_redis_instance" "main" {
   name               = var.name
-  authorized_network = google_service_networking_connection.private_service_connection.network
+  authorized_network = "projects/rad-dev-dogfood-n437/global/networks/nexxxttt"
 
   memory_size_gb = var.memory_size_gb
   tier           = var.tier
@@ -33,7 +33,7 @@ resource "google_redis_instance" "main" {
 # i want to move this to a central location to manage in the deployment pipeline.
 # pre-deploy checklist perhaps.
 locals {
-  apis = ["memcache.googleapis.com"]
+  apis = ["memcache.googleapis.com", "redis.googleapis.com"]
 }
 
 resource "google_project_service" "apis" {
